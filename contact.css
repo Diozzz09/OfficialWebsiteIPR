@@ -8,7 +8,7 @@
 
 /* Gaya dasar body */
 body {
-    background: linear-gradient(to bottom, #ff0000, #ffc7bd);
+    background: linear-gradient(to bottom, #ab5000, #ffc7bd);
     display: flex;
     justify-content: center;
     align-items: center;
