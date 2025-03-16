@@ -25,7 +25,7 @@
                 <option value="">-- Pilih Kelas --</option>
                 <option value="SECATAM">SECATAM</option>
                 <option value="SECABA">SECABA (Kuota: <span id="secabaQuota">20</span>)</option>
-                <option value="Catar">CATAR (Kuota: <span id="catarQuota">10</span>)</option>
+                <option value="Catar">CATAR (Kuota: <span id="CatarQuota">10</span>)</option>
             </select>
 
             <button type="submit">Daftar</button>
@@ -33,16 +33,11 @@
         <p id="message"></p>
     </div>
 
-<!-- File JS -->
-<script type="module" src="Ticket.js"></script>
-
-<!-- Tambahkan Firebase SDK di HTML -->
+<!-- Tambahkan Firebase SDK (HARUS SEBELUM `Ticket.js`) -->
 <script type="module">
-  // Import Firebase dari CDN
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
-  import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
+  import { getFirestore } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
 
-  // Konfigurasi Firebase (Gunakan yang dari project Anda)
   const firebaseConfig = {
     apiKey: "AIzaSyASV...cGjnqOMLxZEzvcj4Jc",
     authDomain: "pendaftarankuota.firebaseapp.com",
@@ -53,12 +48,14 @@
     measurementId: "G-HNXFWFWC39"
   };
 
-  // Inisialisasi Firebase
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
 
   console.log("Firebase berhasil diinisialisasi!");
 </script>
+
+<!-- File JS (HARUS SETELAH Firebase SDK) -->
+<script type="module" src="Ticket.js"></script>
 
 </body>
 </html>
