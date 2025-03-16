@@ -128,4 +128,33 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
 
     updateQuotaDisplay();
+
+// Fungsi untuk menangani pendaftaran
+async function daftar(event) {
+  event.preventDefault();
+
+  // Ambil nilai dari form
+  let nama = document.querySelector("input[name='nama']").value;
+  let discord = document.querySelector("input[name='discord']").value;
+  let roblox = document.querySelector("input[name='roblox']").value;
+  let kelas = document.querySelector("select[name='kelas']").value;
+
+  try {
+    await addDoc(collection(db, "pendaftaran"), {
+      nama: nama,
+      discord: discord,
+      roblox: roblox,
+      kelas: kelas,
+      timestamp: new Date()
+    });
+    alert("Pendaftaran berhasil!");
+  } catch (error) {
+    console.error("Gagal menyimpan data:", error);
+    alert("Terjadi kesalahan.");
+  }
+}
+
+// Pasang event listener ke tombol daftar
+document.querySelector("button").addEventListener("click", daftar);
+
 });
