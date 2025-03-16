@@ -78,7 +78,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             await updateQuota("secaba", secabaQuota);
         }
         if (selectedClass === "Catar") {
-            akpolQuota--;
+            CatarQuota--;
             await updateQuota("Catar", CatarQuota);
         }
 
