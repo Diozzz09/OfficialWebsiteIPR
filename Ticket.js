@@ -13,7 +13,7 @@ firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
 // Kuota awal jika belum ada di database
-const defaultQuota = { secaba: 40, akpol: 20 };
+const defaultQuota = { secaba: 20, akpol: 10 };
 
 // Ambil data kuota dari Firestore
 async function fetchQuota() {
