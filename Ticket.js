@@ -13,7 +13,7 @@ firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
 // Kuota awal jika belum ada di database
-const defaultQuota = { secaba: 20, akpol: 10 };
+const defaultQuota = { secaba: 20, Catar: 10 };
 
 // Ambil data kuota dari Firestore
 async function fetchQuota() {
@@ -37,7 +37,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     let quota = await fetchQuota(); // Ambil kuota terbaru
 
     let secabaQuota = quota.secaba;
-    let akpolQuota = quota.akpol;
+    let akpolQuota = quota.Catar;
 
     const form = document.getElementById("registrationForm");
     const classSelect = document.getElementById("class");
@@ -46,7 +46,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     // Update tampilan kuota
     function updateQuotaDisplay() {
         document.getElementById("secabaQuota").textContent = secabaQuota;
-        document.getElementById("akpolQuota").textContent = akpolQuota;
+        document.getElementById("CatarQuota").textContent = akpolQuota;
     }
 
     form.addEventListener("submit", async function (event) {
@@ -67,8 +67,8 @@ document.addEventListener("DOMContentLoaded", async function () {
             return;
         }
 
-        if (selectedClass === "AKPOL" && akpolQuota === 0) {
-            message.textContent = "Kuota AKPOL telah habis!";
+        if (selectedClass === "Catar" && akpolQuota === 0) {
+            message.textContent = "Kuota Catar telah habis!";
             return;
         }
 
@@ -77,9 +77,9 @@ document.addEventListener("DOMContentLoaded", async function () {
             secabaQuota--;
             await updateQuota("secaba", secabaQuota);
         }
-        if (selectedClass === "AKPOL") {
+        if (selectedClass === "Catar") {
             akpolQuota--;
-            await updateQuota("akpol", akpolQuota);
+            await updateQuota("Catar", CatarQuota);
         }
 
         // Kirim data ke Discord
