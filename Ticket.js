@@ -40,10 +40,13 @@ document.addEventListener("DOMContentLoaded", async function () {
     const classSelect = document.getElementById("class");
     const message = document.getElementById("message");
 
-    // Update tampilan kuota
+    // Update tampilan kuota & nonaktifkan dropdown jika habis
     function updateQuotaDisplay() {
         document.getElementById("secabaQuota").textContent = secabaQuota;
         document.getElementById("catarQuota").textContent = catarQuota;
+
+        document.querySelector('option[value="SECABA"]').disabled = secabaQuota === 0;
+        document.querySelector('option[value="CATAR"]').disabled = catarQuota === 0;
     }
 
     form.addEventListener("submit", async function (event) {
