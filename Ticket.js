@@ -46,7 +46,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     // Update tampilan kuota
     function updateQuotaDisplay() {
         document.getElementById("secabaQuota").textContent = secabaQuota;
-        document.getElementById("CatarQuota").textContent = akpolQuota;
+        document.getElementById("CatarQuota").textContent = CatarQuota;
     }
 
     form.addEventListener("submit", async function (event) {
