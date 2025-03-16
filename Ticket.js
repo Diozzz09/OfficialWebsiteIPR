@@ -5,7 +5,7 @@ const firebaseConfig = {
     projectId: "pendaftarankuota",
     storageBucket: "pendaftarankuota.firebasestorage.app",
     messagingSenderId: "1093056904588",
-    appId: "YOUR1:1093056904588:web:8b8c5956d1fde308d9aaa9_APP_ID"
+    appId: "1:1093056904588:web:8b8c5956d1fde308d9aaa9"
 };
 
 // Inisialisasi Firebase
@@ -94,7 +94,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     });
 
     function sendToDiscord(name, discordUsername, robloxUsername, selectedClass) {
-        const WEBHOOK_URL_DISCORD = "https://discord.com/api/webhooks/YOUR_WEBHOOK_URL"; // Ganti dengan webhook Discord Anda
+        const WEBHOOK_URL_DISCORD = "https://discord.com/api/webhooks/1350740584683536395/FZ2ugpWSnENyTINgQdPFYVhwCUeSRkiUKrUPDyNLq8DJa5LegDAST9WI5fA1NGFnaxgt"; // Ganti dengan webhook Discord Anda
         const data = {
             username: "Pendaftaran Bot",
             embeds: [
