@@ -107,7 +107,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     });
 
     function sendToDiscord(name, discordUsername, robloxUsername, selectedClass) {
-        const WEBHOOK_URL_DISCORD = "https://discord.com/api/webhooks/WEBHOOK_URL"; // Ganti dengan webhook Discord
+        const WEBHOOK_URL_DISCORD = "https://discord.com/api/webhooks/1350740584683536395/FZ2ugpWSnENyTINgQdPFYVhwCUeSRkiUKrUPDyNLq8DJa5LegDAST9WI5fA1NGFnaxgt"; // Ganti dengan webhook Discord
         const data = {
             username: "Pendaftaran Bot",
             embeds: [
