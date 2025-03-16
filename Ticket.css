@@ -1,0 +1,49 @@
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(to bottom, #4b2e19, #d2a679); /* Coklat Pekat → Coklat Pudar */
+    text-align: center;
+    height: 100vh;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container {
+    width: 300px;
+    background: white;
+    padding: 20px;
+    margin: 50px auto;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+h2 {
+    margin-bottom: 15px;
+}
+
+label, input, select, button {
+    display: block;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+input, select, button {
+    padding: 8px;
+}
+
+button {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+button:disabled {
+    background-color: #aaa;
+}
+
+p {
+    color: red;
+    font-weight: bold;
+}

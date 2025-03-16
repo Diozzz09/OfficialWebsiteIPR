@@ -1,0 +1,67 @@
+/* Reset dasar */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+/* Gaya dasar body */
+body {
+    background: linear-gradient(to bottom, #ff0000, #ffc7bd);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    text-align: center;
+}
+
+/* Kontainer utama */
+.container {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(10px);
+    width: 90%;
+    max-width: 400px;
+}
+
+/* Gaya profil */
+.profile img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    border: 3px solid white;
+    margin-bottom: 15px;
+}
+
+.profile h1 {
+    font-size: 22px;
+    color: white;
+    margin-bottom: 10px;
+}
+
+.profile p {
+    color: white;
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+
+/* Gaya tombol link */
+.links a {
+    display: block;
+    text-decoration: none;
+    color: white;
+    background: rgba(255, 255, 255, 0.2);
+    padding: 12px;
+    border-radius: 8px;
+    margin: 10px 0;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.links a:hover {
+    background: rgba(255, 255, 255, 0.5);
+    transform: scale(1.05);
+}
