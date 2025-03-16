@@ -1,24 +1,27 @@
-// Ambil referensi ke Firestore dari HTML
-const db = firebase.firestore();
+import { getFirestore, collection, addDoc, doc, getDoc, updateDoc } 
+from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
+
+const db = getFirestore();
 
 // Kuota awal jika belum ada di database
 const defaultQuota = { secaba: 20, Catar: 10 };
 
 // Ambil data kuota dari Firestore
 async function fetchQuota() {
-    const doc = await db.collection("kuota").doc("pendaftaran").get();
-    if (doc.exists) {
-        return doc.data();
+    const docRef = doc(db, "kuota", "pendaftaran");
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+        return docSnap.data();
     } else {
-        // Jika belum ada, buat data awal di Firestore
-        await db.collection("kuota").doc("pendaftaran").set(defaultQuota);
+        await updateDoc(docRef, defaultQuota);
         return defaultQuota;
     }
 }
 
 // Update kuota di Firestore
 async function updateQuota(classType, newQuota) {
-    await db.collection("kuota").doc("pendaftaran").update({ [classType]: newQuota });
+    const docRef = doc(db, "kuota", "pendaftaran");
+    await updateDoc(docRef, { [classType]: newQuota });
 }
 
 // Fungsi utama
@@ -26,20 +29,19 @@ document.addEventListener("DOMContentLoaded", async function () {
     let quota = await fetchQuota(); // Ambil kuota terbaru
 
     let secabaQuota = quota.secaba;
-    let catarQuota = quota.Catar;
+    let CatarQuota = quota.Catar;
 
     const form = document.getElementById("registrationForm");
     const classSelect = document.getElementById("class");
     const message = document.getElementById("message");
 
-    // Update tampilan kuota
     function updateQuotaDisplay() {
         document.getElementById("secabaQuota").textContent = secabaQuota;
-        document.getElementById("catarQuota").textContent = catarQuota;
+        document.getElementById("CatarQuota").textContent = CatarQuota;
     }
 
     form.addEventListener("submit", async function (event) {
-        event.preventDefault(); // Mencegah submit default
+        event.preventDefault();
 
         let name = document.getElementById("name").value.trim();
         let discordUsername = document.getElementById("discordUsername").value.trim();
@@ -56,22 +58,20 @@ document.addEventListener("DOMContentLoaded", async function () {
             return;
         }
 
-        if (selectedClass === "Catar" && catarQuota === 0) {
+        if (selectedClass === "Catar" && CatarQuota === 0) {
             message.textContent = "Kuota Catar telah habis!";
             return;
         }
 
-        // Kurangi kuota dan update ke Firestore
         if (selectedClass === "SECABA") {
             secabaQuota--;
             await updateQuota("secaba", secabaQuota);
         }
         if (selectedClass === "Catar") {
-            catarQuota--;
-            await updateQuota("Catar", catarQuota);
+            CatarQuota--;
+            await updateQuota("Catar", CatarQuota);
         }
 
-        // Kirim data ke Discord
         sendToDiscord(name, discordUsername, robloxUsername, selectedClass);
 
         updateQuotaDisplay();
@@ -83,7 +83,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     });
 
     function sendToDiscord(name, discordUsername, robloxUsername, selectedClass) {
-        const WEBHOOK_URL_DISCORD = "https://discord.com/api/webhooks/1350740584683536395/FZ2ugpWSnENyTINgQdPFYVhwCUeSRkiUKrUPDyNLq8DJa5LegDAST9WI5fA1NGFnaxgt"; // Ganti dengan webhook Discord Anda
+        const WEBHOOK_URL_DISCORD = "https://discord.com/api/webhooks/1350740584683536395/FZ2ugpWSnENyTINgQdPFYVhwCUeSRkiUKrUPDyNLq8DJa5LegDAST9WI5fA1NGFnaxgt";
         const data = {
             username: "Pendaftaran Bot",
             embeds: [
@@ -117,4 +117,26 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
 
     updateQuotaDisplay();
+
+    async function daftar(event) {
+        event.preventDefault();
+
+        let nama = document.querySelector("input[name='nama']").value;
+        let discord = document.querySelector("input[name='discord']").value;
+        let roblox = document.querySelector("input[name='roblox']").value;
+        let kelas = document.querySelector("select[name='kelas']").value;
+
+        try {
+            await addDoc(collection(db, "pendaftaran"), {
+                nama, discord, roblox, kelas,
+                timestamp: new Date()
+            });
+            alert("Pendaftaran berhasil!");
+        } catch (error) {
+            console.error("Gagal menyimpan data:", error);
+            alert("Terjadi kesalahan.");
+        }
+    }
+
+    document.querySelector("button").addEventListener("click", daftar);
 });
