@@ -1,71 +1,64 @@
-import { getFirestore, doc, getDoc, updateDoc, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pendaftaran</title>
+    <link rel="stylesheet" href="Ticket.css">
+</head>
+<body>
 
-const db = window.db; // Menggunakan Firestore dari `index.html`
-const classSelect = document.getElementById("class");
-const secabaQuota = document.getElementById("secabaQuota");
-const catarQuota = document.getElementById("catarQuota");
+    <div class="container">
+        <h2>Form Pendaftaran</h2>
+        <form id="registrationForm">
+            <label for="name">Nama Lengkap:</label>
+            <input type="text" id="name" required>
 
-let kuotaKelas = {}; // Menyimpan kuota kelas
+            <label for="discordUsername">Username Discord:</label>
+            <input type="text" id="discordUsername" required>
 
-// Ambil data kuota dari Firestore
-async function loadKuota() {
-    const docRef = doc(db, "kelas", "kuota"); // Ganti sesuai koleksi di Firestore
-    const docSnap = await getDoc(docRef);
+            <label for="robloxUsername">Username Roblox:</label>
+            <input type="text" id="robloxUsername" required>
 
-    if (docSnap.exists()) {
-        const data = docSnap.data();
-        kuotaKelas = {
-            "SECABA": data.SECABA || 0,
-            "CATAR": data.CATAR || 0
+            <label for="class">Pilih Kelas:</label>
+            <select id="class" required>
+                <option value="">-- Pilih Kelas --</option>
+                <option value="SECATAM">SECATAM</option>
+                <option value="SECABA">SECABA (Kuota: <span id="secabaQuota">20</span>)</option>
+                <option value="CATAR">CATAR (Kuota: <span id="catarQuota">10</span>)</option>
+            </select>
+
+            <button type="submit">Daftar</button>
+        </form>
+        <p id="message"></p>
+    </div>
+
+    <!-- Tambahkan Firebase SDK SEBELUM `Ticket.js` -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
+        import { getFirestore } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyASV...cGjnqOMLxZEzvcj4Jc",
+            authDomain: "pendaftarankuota.firebaseapp.com",
+            projectId: "pendaftarankuota",
+            storageBucket: "pendaftarankuota.appspot.com",
+            messagingSenderId: "1093056904588",
+            appId: "1:1093056904588:web:8b8c5956d1fde308d9aaa9",
+            measurementId: "G-HNXFWFWC39"
         };
 
-        secabaQuota.textContent = kuotaKelas["SECABA"];
-        catarQuota.textContent = kuotaKelas["CATAR"];
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
 
-        // Disable opsi jika kuota habis
-        document.querySelector('option[value="SECABA"]').disabled = kuotaKelas["SECABA"] <= 0;
-        document.querySelector('option[value="CATAR"]').disabled = kuotaKelas["CATAR"] <= 0;
-    } else {
-        console.error("❌ Data kuota tidak ditemukan di Firestore!");
-    }
-}
+        // Simpan Firestore ke global agar bisa dipakai di `Ticket.js`
+        window.db = db;
 
-// Jalankan saat halaman dimuat
-loadKuota();
+        console.log("✅ Firebase berhasil diinisialisasi!");
+    </script>
 
-// Fungsi untuk daftar
-document.getElementById("registrationForm").addEventListener("submit", async function(event) {
-    event.preventDefault();
+    <!-- Pastikan Ticket.js dipanggil SETELAH Firebase SDK -->
+    <script type="module" src="Ticket.js"></script>
 
-    const nama = document.getElementById("name").value;
-    const discordUsername = document.getElementById("discordUsername").value;
-    const robloxUsername = document.getElementById("robloxUsername").value;
-    const selectedClass = classSelect.value;
-
-    if (!selectedClass || kuotaKelas[selectedClass] <= 0) {
-        alert("Kuota untuk kelas ini sudah habis! Silakan pilih kelas lain.");
-        return;
-    }
-
-    try {
-        // Simpan data pendaftaran ke Firestore
-        await addDoc(collection(db, "pendaftaran"), {
-            nama,
-            discordUsername,
-            robloxUsername,
-            kelas: selectedClass
-        });
-
-        // Kurangi kuota kelas
-        const docRef = doc(db, "kelas", "kuota");
-        await updateDoc(docRef, {
-            [selectedClass]: kuotaKelas[selectedClass] - 1
-        });
-
-        alert("✅ Pendaftaran berhasil!");
-        location.reload(); // Refresh untuk update kuota
-    } catch (error) {
-        console.error("❌ Error saat mendaftar:", error);
-        alert("Terjadi kesalahan, coba lagi.");
-    }
-});
+</body>
+</html>
