@@ -1,4 +1,4 @@
-import { getFirestore, collection, doc, getDoc, setDoc, updateDoc, addDoc } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
+import { getFirestore, collection, doc, getDoc, setDoc, updateDoc, addDoc, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
 
 const db = window.db;  // Ambil Firestore dari global variable
 
@@ -8,10 +8,8 @@ if (!db) {
     console.log("✅ Firestore siap digunakan.");
 }
 
-// Kuota awal jika belum ada di database
 const defaultQuota = { secaba: 20, catar: 10 };
 
-// Ambil data kuota dari Firestore
 async function fetchQuota() {
     const docRef = doc(db, "kuota", "pendaftaran");
     const docSnap = await getDoc(docRef);
@@ -24,12 +22,22 @@ async function fetchQuota() {
     }
 }
 
-// Update kuota di Firestore
 async function updateQuota(classType, newQuota) {
     await updateDoc(doc(db, "kuota", "pendaftaran"), { [classType]: newQuota });
 }
 
-// Fungsi utama
+async function isUserAlreadyRegistered(name, discordUsername, robloxUsername) {
+    const q = query(
+        collection(db, "pendaftaran"),
+        where("nama", "==", name),
+        where("discord", "==", discordUsername),
+        where("roblox", "==", robloxUsername)
+    );
+
+    const querySnapshot = await getDocs(q);
+    return !querySnapshot.empty;
+}
+
 document.addEventListener("DOMContentLoaded", async function () {
     let quota = await fetchQuota();
 
@@ -40,7 +48,6 @@ document.addEventListener("DOMContentLoaded", async function () {
     const classSelect = document.getElementById("class");
     const message = document.getElementById("message");
 
-    // Update tampilan kuota & nonaktifkan dropdown jika habis
     function updateQuotaDisplay() {
         document.getElementById("secabaQuota").textContent = secabaQuota;
         document.getElementById("catarQuota").textContent = catarQuota;
@@ -72,7 +79,13 @@ document.addEventListener("DOMContentLoaded", async function () {
             return;
         }
 
-        // Kurangi kuota dan update ke Firestore
+        const alreadyRegistered = await isUserAlreadyRegistered(name, discordUsername, robloxUsername);
+        if (alreadyRegistered) {
+            message.style.color = "red";
+            message.textContent = "Anda sudah mendaftar sebelumnya! Pendaftaran ditolak.";
+            return;
+        }
+
         if (selectedClass === "SECABA") {
             secabaQuota--;
             await updateQuota("secaba", secabaQuota);
@@ -82,7 +95,6 @@ document.addEventListener("DOMContentLoaded", async function () {
             await updateQuota("catar", catarQuota);
         }
 
-        // Simpan data ke Firestore
         try {
             await addDoc(collection(db, "pendaftaran"), {
                 nama: name,
@@ -98,7 +110,6 @@ document.addEventListener("DOMContentLoaded", async function () {
             return;
         }
 
-        // Kirim data ke Discord
         sendToDiscord(name, discordUsername, robloxUsername, selectedClass);
 
         updateQuotaDisplay();
@@ -110,7 +121,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     });
 
     function sendToDiscord(name, discordUsername, robloxUsername, selectedClass) {
-        const WEBHOOK_URL_DISCORD = "https://discord.com/api/webhooks/1350740584683536395/FZ2ugpWSnENyTINgQdPFYVhwCUeSRkiUKrUPDyNLq8DJa5LegDAST9WI5fA1NGFnaxgt"; // Ganti dengan webhook Discord
+        const WEBHOOK_URL_DISCORD = "https://discord.com/api/webhooks/1350740584683536395/FZ2ugpWSnENyTINgQdPFYVhwCUeSRkiUKrUPDyNLq8DJa5LegDAST9WI5fA1NGFnaxgt";
         const data = {
             username: "Pendaftaran Bot",
             embeds: [
